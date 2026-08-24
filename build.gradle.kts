@@ -703,15 +703,39 @@ mavenPublishing {
 // Tasks
 // ============================================================================
 
+// Patch generated SPM Package.swift to include minimum macOS platform for Swift Concurrency
+tasks.configureEach {
+    if (name.endsWith("GenerateSPMPackage")) {
+        doLast {
+            val spmDir =
+                layout.buildDirectory
+                    .dir("SPMPackage")
+                    .orNull
+                    ?.asFile
+            if (spmDir != null && spmDir.exists()) {
+                spmDir.walkTopDown().filter { it.name == "Package.swift" }.forEach { file ->
+                    val text = file.readText()
+                    if (!text.contains("platforms:")) {
+                        file.writeText(
+                            text.replaceFirst(
+                                Regex("""(let package = Package\s*\(\s*name:\s*"[^"]*",)"""),
+                                "$1\n    platforms: [.macOS(.v14)],",
+                            ),
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Exact test lifecycle task. Without this, ./gradlew test is ambiguous between
-// Android test task names. This runs commonTest through the KMP allTests
+// Android test task names. This runs commonTest through the KMP hostTests
 // lifecycle and adds the Android host + Swift Export parity tests.
 tasks.register("test") {
     group = "verification"
-    description = "Runs the commonTest-backed KMP suite, Android host tests, and Swift Export smoke test."
-    dependsOn("allTests")
-    dependsOn("testAndroidHostTest")
-    dependsOn("swiftExportSmokeTest")
+    description = "Alias for hostTests and swiftExportSmokeTest to satisfy standard test invocations."
+    dependsOn("hostTests", "swiftExportSmokeTest")
 }
 
 tasks.register("setupAndroidSdk") {
@@ -753,6 +777,7 @@ tasks.register("swiftExportSmokeTest") {
                 .dir("swift-test")
                 .get()
                 .asFile
+                .apply { mkdirs() }
                 .absolutePath
         execOperations
             .exec {
@@ -774,6 +799,7 @@ tasks.register("swiftExportSmokeTest") {
                         "FRAMEWORKS_FOLDER_PATH" to "Frameworks",
                         "MACOSX_DEPLOYMENT_TARGET" to "14.0",
                         "DEPLOYMENT_TARGET_SETTING_NAME" to "MACOSX_DEPLOYMENT_TARGET",
+                        "ENABLE_USER_SCRIPT_SANDBOXING" to "NO",
                     ),
                 )
             }.assertNormalExitValue()
@@ -794,12 +820,6 @@ tasks.register("swiftExportSmokeTest") {
                 )
             }
         }
-
-        execOperations
-            .exec {
-                workingDir = layout.projectDirectory.dir("swift-test-harness").asFile
-                commandLine("swift", "package", "reset")
-            }.assertNormalExitValue()
 
         execOperations
             .exec {

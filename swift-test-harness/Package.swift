@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftTestHarness",
+    platforms: [.macOS(.v14)],
     dependencies: [
         .package(name: "TracingOpentelemetry", path: "../build/SPMPackage/macosArm64/Debug")
     ],
