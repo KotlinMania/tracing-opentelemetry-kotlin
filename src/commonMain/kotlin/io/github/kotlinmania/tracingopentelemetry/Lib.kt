@@ -60,6 +60,6 @@ public sealed class SpanStatus {
     public data object Ok : SpanStatus()
 
     public data class Error(
-        val description: String = "",
+        val message: String = "",
     ) : SpanStatus()
 }
