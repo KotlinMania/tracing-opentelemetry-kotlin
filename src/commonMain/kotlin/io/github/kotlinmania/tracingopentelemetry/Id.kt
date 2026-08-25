@@ -1,8 +1,8 @@
 // Span identifier value used as stack keys.
 package io.github.kotlinmania.tracingopentelemetry
 
-internal class Id private constructor(
-    val value: ULong,
+public class Id private constructor(
+    public val value: ULong,
 ) {
     override fun equals(other: Any?): Boolean = this === other || (other is Id && value == other.value)
 
@@ -10,7 +10,8 @@ internal class Id private constructor(
 
     override fun toString(): String = "Id(value=$value)"
 
-    companion object {
-        fun fromU64(value: ULong): Id = Id(value)
+    public companion object {
+        public fun fromU64(value: ULong): Id = Id(value)
     }
 }
+

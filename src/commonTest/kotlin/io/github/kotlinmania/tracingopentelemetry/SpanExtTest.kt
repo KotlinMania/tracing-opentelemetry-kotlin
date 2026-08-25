@@ -13,9 +13,9 @@ class SpanExtTest {
         var spanStatus: SpanStatus = SpanStatus.Unset
         val events: MutableList<SpanEvent> = mutableListOf()
 
-        override fun setParent(cx: OtelContext): Result<Unit> {
+        override fun setParent(cx: OtelContext): SetParentOutcome {
             parent = cx
-            return Result.success(Unit)
+            return SetParentOutcome.Ok
         }
 
         override fun addLink(cx: OtelContext) {
@@ -86,7 +86,7 @@ class SpanExtTest {
     fun testSetParentAndAttributes() {
         val span = MockSpan()
         val parent = OtelContext.of("trace-1", "span-1")
-        assertTrue(span.setParent(parent).isSuccess)
+        assertEquals(SetParentOutcome.Ok, span.setParent(parent))
         assertEquals(parent, span.context())
 
         span.setAttribute("http.status_code", "200")
