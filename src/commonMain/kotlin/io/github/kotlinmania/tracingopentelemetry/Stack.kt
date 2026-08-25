@@ -6,18 +6,18 @@ private data class IdValue<T>(
     val value: T,
 )
 
-internal class IdValueStack<T> {
+public class IdValueStack<T> {
     private val stack: MutableList<IdValue<T>> = mutableListOf()
 
-    companion object {
-        fun <T> new(): IdValueStack<T> = IdValueStack()
+    public companion object {
+        public fun <T> new(): IdValueStack<T> = IdValueStack()
     }
 
-    fun push(id: Id, value: T) {
+    public fun push(id: Id, value: T) {
         stack.add(IdValue(id, value))
     }
 
-    fun pop(id: Id): T? {
+    public fun pop(id: Id): T? {
         val index = stack.indexOfLast { ctxId -> ctxId.id == id }
         if (index >= 0) {
             val (_, value) = stack.removeAt(index)
@@ -26,5 +26,6 @@ internal class IdValueStack<T> {
         return null
     }
 
-    fun len(): Int = stack.size
+    public fun len(): Int = stack.size
 }
+

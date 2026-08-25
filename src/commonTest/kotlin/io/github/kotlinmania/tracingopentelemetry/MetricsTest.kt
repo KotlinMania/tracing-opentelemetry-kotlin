@@ -56,4 +56,12 @@ class MetricsTest {
         assertEquals(KeyValue("service", "web"), attributes[0])
         assertEquals(KeyValue("active", "true"), attributes[1])
     }
+
+    @Test
+    fun filterLayerShouldFilterNonMetricsEvent() {
+        assertFalse(MetricsFilter.isMetricsEvent("key"))
+        assertFalse(MetricsFilter.isMetricsEvent("foo"))
+        assertTrue(MetricsFilter.isMetricsEvent("monotonic_counter.requests"))
+    }
 }
+
