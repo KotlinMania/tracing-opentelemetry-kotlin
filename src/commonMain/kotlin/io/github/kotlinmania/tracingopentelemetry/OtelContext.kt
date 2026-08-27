@@ -60,4 +60,3 @@ public fun getOtelContext(data: OtelData): OtelContext =
         is OtelDataState.Context -> state.currentCx
         is OtelDataState.Builder -> state.parentCx
     }
-

@@ -14,4 +14,3 @@ public class Id private constructor(
         public fun fromU64(value: ULong): Id = Id(value)
     }
 }
-

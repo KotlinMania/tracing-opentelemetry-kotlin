@@ -1,7 +1,6 @@
 // port-lint: tests layer.rs
 package io.github.kotlinmania.tracingopentelemetry.layer
 
-import io.github.kotlinmania.tracingopentelemetry.Id
 import io.github.kotlinmania.tracingopentelemetry.KeyValue
 import io.github.kotlinmania.tracingopentelemetry.OtelContext
 import io.github.kotlinmania.tracingopentelemetry.OtelData
@@ -43,11 +42,17 @@ public class TestSpan(
     public fun endWithTimestamp(timestamp: Any?) {}
 }
 
+public class TestDynError(
+    override val message: String = "dynamic error",
+) : Exception(message)
 
-public class TestDynError(override val message: String = "dynamic error") : Exception(message)
+public data class ValueA(
+    val a: String,
+)
 
-public data class ValueA(val a: String)
-public data class ValueB(val b: Int)
+public data class ValueB(
+    val b: Int,
+)
 
 class LayerTest {
     @Test
@@ -479,4 +484,3 @@ class LayerTest {
         assertFalse(l.contextActivation())
     }
 }
-

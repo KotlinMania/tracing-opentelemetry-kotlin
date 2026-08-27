@@ -64,4 +64,3 @@ class MetricsTest {
         assertTrue(MetricsFilter.isMetricsEvent("monotonic_counter.requests"))
     }
 }
-

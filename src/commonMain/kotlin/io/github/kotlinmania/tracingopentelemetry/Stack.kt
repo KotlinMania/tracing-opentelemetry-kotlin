@@ -28,4 +28,3 @@ public class IdValueStack<T> {
 
     public fun len(): Int = stack.size
 }
-
