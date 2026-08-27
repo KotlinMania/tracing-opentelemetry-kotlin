@@ -1,4 +1,4 @@
-// port-lint: tests layer.rs
+// port-lint: tests tracing-opentelemetry/src/layer.rs
 package io.github.kotlinmania.tracingopentelemetry.layer
 
 import io.github.kotlinmania.tracingopentelemetry.Id

@@ -1,4 +1,4 @@
-// port-lint: source otel_context.rs
+// port-lint: source tracing-opentelemetry/src/otel_context.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 /**
