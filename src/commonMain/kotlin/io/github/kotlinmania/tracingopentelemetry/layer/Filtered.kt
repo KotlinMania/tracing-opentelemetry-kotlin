@@ -82,4 +82,3 @@ public class FilteredOpenTelemetryLayer<F>(
         ): FilteredOpenTelemetryLayer<F> = FilteredOpenTelemetryLayer(inner, filter)
     }
 }
-

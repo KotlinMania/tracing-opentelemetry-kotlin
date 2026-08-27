@@ -54,4 +54,3 @@ class StackTest {
         assertEquals(0, stack.len())
     }
 }
-

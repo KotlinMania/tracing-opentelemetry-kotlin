@@ -37,7 +37,10 @@ public sealed class SetParentError(
  */
 public sealed class SetParentOutcome {
     public data object Ok : SetParentOutcome()
-    public data class Err(public val error: SetParentError) : SetParentOutcome()
+
+    public data class Err(
+        public val error: SetParentError,
+    ) : SetParentOutcome()
 }
 
 /**
@@ -124,4 +127,3 @@ public interface OpenTelemetrySpanExt {
         attributes: List<KeyValue> = emptyList(),
     )
 }
-

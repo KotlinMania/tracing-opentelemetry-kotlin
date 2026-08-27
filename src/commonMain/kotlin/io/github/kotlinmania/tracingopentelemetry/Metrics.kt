@@ -1,8 +1,6 @@
 // port-lint: source metrics.rs
 package io.github.kotlinmania.tracingopentelemetry
 
-import io.github.kotlinmania.tracingopentelemetry.layer.FilteredOpenTelemetryLayer
-
 public const val METRIC_PREFIX_MONOTONIC_COUNTER: String = "monotonic_counter."
 public const val METRIC_PREFIX_COUNTER: String = "counter."
 public const val METRIC_PREFIX_HISTOGRAM: String = "histogram."
@@ -374,4 +372,3 @@ public class MetricsLayer(
         public fun new(): MetricsLayer = MetricsLayer()
     }
 }
-

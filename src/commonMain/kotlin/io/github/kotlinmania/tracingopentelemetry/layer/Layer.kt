@@ -6,7 +6,6 @@ import io.github.kotlinmania.tracingopentelemetry.IdValueStack
 import io.github.kotlinmania.tracingopentelemetry.KeyValue
 import io.github.kotlinmania.tracingopentelemetry.OtelContext
 import io.github.kotlinmania.tracingopentelemetry.OtelData
-import io.github.kotlinmania.tracingopentelemetry.OtelDataState
 import io.github.kotlinmania.tracingopentelemetry.SpanStatus
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -215,9 +214,10 @@ public class SpanEventVisitor(
             "error" -> {
                 if (eventName.isEmpty()) {
                     if (semConvConfig.errorEventsToStatus) {
-                        spanBuilderUpdates = (spanBuilderUpdates ?: SpanBuilderUpdates()).apply {
-                            status = SpanStatus.Error(value)
-                        }
+                        spanBuilderUpdates =
+                            (spanBuilderUpdates ?: SpanBuilderUpdates()).apply {
+                                status = SpanStatus.Error(value)
+                            }
                     }
                     if (semConvConfig.errorEventsToExceptions) {
                         eventName = EVENT_EXCEPTION_NAME
@@ -441,4 +441,3 @@ public class OpenTelemetryLayer(
  * Constructs an OpenTelemetry layer.
  */
 public fun layer(): OpenTelemetryLayer = OpenTelemetryLayer.new()
-

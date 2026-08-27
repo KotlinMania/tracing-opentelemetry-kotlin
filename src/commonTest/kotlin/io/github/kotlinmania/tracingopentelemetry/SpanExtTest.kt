@@ -3,7 +3,6 @@ package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class SpanExtTest {
     private class MockSpan : OpenTelemetrySpanExt {
