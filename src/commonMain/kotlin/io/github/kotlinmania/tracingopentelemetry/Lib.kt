@@ -1,4 +1,4 @@
-// port-lint: source tracing-opentelemetry/src/lib.rs
+// port-lint: source lib.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.time.Clock
