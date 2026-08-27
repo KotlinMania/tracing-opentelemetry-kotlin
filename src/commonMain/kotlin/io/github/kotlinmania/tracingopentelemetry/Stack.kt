@@ -1,4 +1,4 @@
-// port-lint: source stack.rs
+// port-lint: source tracing-opentelemetry/src/stack.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 private data class IdValue<T>(

@@ -1,4 +1,4 @@
-// port-lint: source metrics.rs
+// port-lint: source tracing-opentelemetry/src/metrics.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import io.github.kotlinmania.tracingopentelemetry.layer.FilteredOpenTelemetryLayer
