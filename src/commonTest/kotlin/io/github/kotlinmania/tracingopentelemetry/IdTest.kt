@@ -1,4 +1,4 @@
-// port-lint: tests tracing-opentelemetry/src/span_ext.rs
+// port-lint: tests span_ext.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.test.Test
