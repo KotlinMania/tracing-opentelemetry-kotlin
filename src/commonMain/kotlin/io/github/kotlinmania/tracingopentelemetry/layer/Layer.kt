@@ -397,27 +397,64 @@ public class OpenTelemetryLayer(
         f(startCx(id))
     }
 
-    public fun onNewSpan(attrs: Any? = null, id: Id? = null, ctx: Any? = null) {}
+    public fun onNewSpan(attrs: Any? = null, id: Id? = null, ctx: Any? = null) {
+        attrs?.hashCode()
+        id?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onEnter(id: Id? = null, ctx: Any? = null) {}
+    public fun onEnter(id: Id? = null, ctx: Any? = null) {
+        id?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onExit(id: Id? = null, ctx: Any? = null) {}
+    public fun onExit(id: Id? = null, ctx: Any? = null) {
+        id?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onRecord(span: Id? = null, values: Any? = null, ctx: Any? = null) {}
+    public fun onRecord(span: Id? = null, values: Any? = null, ctx: Any? = null) {
+        span?.hashCode()
+        values?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onFollowsFrom(span: Id? = null, follows: Id? = null, ctx: Any? = null) {}
+    public fun onFollowsFrom(span: Id? = null, follows: Id? = null, ctx: Any? = null) {
+        span?.hashCode()
+        follows?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onEvent(event: Any? = null, ctx: Any? = null) {}
+    public fun onEvent(event: Any? = null, ctx: Any? = null) {
+        event?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onClose(id: Id? = null, ctx: Any? = null) {}
+    public fun onClose(id: Id? = null, ctx: Any? = null) {
+        id?.hashCode()
+        ctx?.hashCode()
+    }
 
-    public fun onLayer(subscriber: Any? = null) {}
+    public fun onLayer(subscriber: Any? = null) {
+        subscriber?.hashCode()
+    }
 
-    public fun registerCallsite(metadata: Any? = null): Any? = null
+    public fun registerCallsite(metadata: Any? = null): Any? {
+        metadata?.hashCode()
+        return null
+    }
 
-    public fun enabled(metadata: Any? = null, ctx: Any? = null): Boolean = true
+    public fun enabled(metadata: Any? = null, ctx: Any? = null): Boolean {
+        metadata?.hashCode()
+        ctx?.hashCode()
+        return true
+    }
 
-    public fun onIdChange(old: Id? = null, new: Id? = null, ctx: Any? = null) {}
+    public fun onIdChange(old: Id? = null, new: Id? = null, ctx: Any? = null) {
+        old?.hashCode()
+        new?.hashCode()
+        ctx?.hashCode()
+    }
 
     public fun downcastRaw(typeId: Any? = null): Any? =
         if (typeId == this::class) this else null

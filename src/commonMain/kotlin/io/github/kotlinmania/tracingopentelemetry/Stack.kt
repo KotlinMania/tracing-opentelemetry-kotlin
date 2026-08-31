@@ -10,7 +10,9 @@ public class IdValueStack<T> {
     private val stack: MutableList<IdValue<T>> = mutableListOf()
 
     public companion object {
-        public fun <T> new(): IdValueStack<T> = IdValueStack()
+        public fun <T> new(): IdValueStack<T> {
+            return IdValueStack()
+        }
     }
 
     public fun push(id: Id, value: T) {
@@ -26,5 +28,7 @@ public class IdValueStack<T> {
         return null
     }
 
-    public fun len(): Int = stack.size
+    public fun len(): Int {
+        return stack.size
+    }
 }
