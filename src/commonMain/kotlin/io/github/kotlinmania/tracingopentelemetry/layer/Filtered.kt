@@ -1,4 +1,4 @@
-// port-lint: source layer/filtered.rs
+// port-lint: source tracing-opentelemetry/src/layer/filtered.rs
 package io.github.kotlinmania.tracingopentelemetry.layer
 
 import io.github.kotlinmania.tracingopentelemetry.Id

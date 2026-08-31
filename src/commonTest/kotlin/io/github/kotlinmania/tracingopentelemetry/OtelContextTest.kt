@@ -1,4 +1,4 @@
-// port-lint: tests otel_context.rs
+// port-lint: tests tracing-opentelemetry/src/otel_context.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.test.Test

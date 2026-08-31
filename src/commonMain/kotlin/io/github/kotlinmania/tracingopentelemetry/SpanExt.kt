@@ -1,4 +1,4 @@
-// port-lint: source span_ext.rs
+// port-lint: source tracing-opentelemetry/src/span_ext.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.time.Instant
