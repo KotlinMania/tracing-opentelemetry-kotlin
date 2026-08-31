@@ -1,4 +1,4 @@
-// port-lint: tests metrics.rs
+// port-lint: tests tracing-opentelemetry/src/metrics.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.test.Test
