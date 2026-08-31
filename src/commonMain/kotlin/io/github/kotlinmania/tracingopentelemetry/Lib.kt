@@ -1,4 +1,4 @@
-// port-lint: source tracing-opentelemetry/src/lib.rs
+// port-lint: source lib.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 import kotlin.time.Clock
@@ -59,7 +59,7 @@ public class OtelData internal constructor(
     public fun traceId(): String? =
         when (val s = state) {
             is OtelDataState.Context -> s.currentCx.traceId()
-            else -> null
+            is OtelDataState.Builder -> null
         }
 
     /**
@@ -70,7 +70,7 @@ public class OtelData internal constructor(
     public fun spanId(): String? =
         when (val s = state) {
             is OtelDataState.Context -> s.currentCx.spanId()
-            else -> null
+            is OtelDataState.Builder -> null
         }
 }
 
