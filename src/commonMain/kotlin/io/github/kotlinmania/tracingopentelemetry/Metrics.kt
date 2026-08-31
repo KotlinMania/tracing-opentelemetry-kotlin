@@ -1,4 +1,4 @@
-// port-lint: source metrics.rs
+// port-lint: source tracing-opentelemetry/src/metrics.rs
 package io.github.kotlinmania.tracingopentelemetry
 
 public const val METRIC_PREFIX_MONOTONIC_COUNTER: String = "monotonic_counter."
