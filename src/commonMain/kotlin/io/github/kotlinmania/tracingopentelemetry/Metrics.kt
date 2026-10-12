@@ -65,24 +65,41 @@ public class Instruments {
         attributes: List<KeyValue> = emptyList(),
     ) {
         when (instrumentType) {
-            is InstrumentType.CounterU64 ->
+            is InstrumentType.CounterU64 -> {
                 updateOrInsert(_u64Counter, metricName, { instrumentType.value }, { it + instrumentType.value })
-            is InstrumentType.CounterF64 ->
+            }
+
+            is InstrumentType.CounterF64 -> {
                 updateOrInsert(_f64Counter, metricName, { instrumentType.value }, { it + instrumentType.value })
-            is InstrumentType.UpDownCounterI64 ->
+            }
+
+            is InstrumentType.UpDownCounterI64 -> {
                 updateOrInsert(_i64UpDownCounter, metricName, { instrumentType.value }, { it + instrumentType.value })
-            is InstrumentType.UpDownCounterF64 ->
+            }
+
+            is InstrumentType.UpDownCounterF64 -> {
                 updateOrInsert(_f64UpDownCounter, metricName, { instrumentType.value }, { it + instrumentType.value })
-            is InstrumentType.HistogramU64 ->
+            }
+
+            is InstrumentType.HistogramU64 -> {
                 updateOrInsert(_u64Histogram, metricName, { instrumentType.value }, { instrumentType.value })
-            is InstrumentType.HistogramF64 ->
+            }
+
+            is InstrumentType.HistogramF64 -> {
                 updateOrInsert(_f64Histogram, metricName, { instrumentType.value }, { instrumentType.value })
-            is InstrumentType.GaugeU64 ->
+            }
+
+            is InstrumentType.GaugeU64 -> {
                 updateOrInsert(_u64Gauge, metricName, { instrumentType.value }, { instrumentType.value })
-            is InstrumentType.GaugeI64 ->
+            }
+
+            is InstrumentType.GaugeI64 -> {
                 updateOrInsert(_i64Gauge, metricName, { instrumentType.value }, { instrumentType.value })
-            is InstrumentType.GaugeF64 ->
+            }
+
+            is InstrumentType.GaugeF64 -> {
                 updateOrInsert(_f64Gauge, metricName, { instrumentType.value }, { instrumentType.value })
+            }
         }
     }
 }
@@ -176,20 +193,24 @@ public class MetricVisitor {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_GAUGE)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.GaugeU64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_MONOTONIC_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_MONOTONIC_COUNTER)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.CounterU64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_COUNTER)
                 if (value <= Long.MAX_VALUE.toULong()) {
                     visitedMetrics.add(MetricEntry(metricName, InstrumentType.UpDownCounterI64(value.toLong())))
                 }
             }
+
             fieldName.startsWith(METRIC_PREFIX_HISTOGRAM) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_HISTOGRAM)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.HistogramU64(value)))
             }
+
             else -> {
                 attributes.add(KeyValue(fieldName, value.toString()))
             }
@@ -205,18 +226,22 @@ public class MetricVisitor {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_GAUGE)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.GaugeF64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_MONOTONIC_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_MONOTONIC_COUNTER)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.CounterF64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_COUNTER)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.UpDownCounterF64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_HISTOGRAM) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_HISTOGRAM)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.HistogramF64(value)))
             }
+
             else -> {
                 attributes.add(KeyValue(fieldName, value.toString()))
             }
@@ -232,14 +257,17 @@ public class MetricVisitor {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_GAUGE)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.GaugeI64(value)))
             }
+
             fieldName.startsWith(METRIC_PREFIX_MONOTONIC_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_MONOTONIC_COUNTER)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.CounterU64(value.toULong())))
             }
+
             fieldName.startsWith(METRIC_PREFIX_COUNTER) -> {
                 val metricName = fieldName.removePrefix(METRIC_PREFIX_COUNTER)
                 visitedMetrics.add(MetricEntry(metricName, InstrumentType.UpDownCounterI64(value)))
             }
+
             else -> {
                 attributes.add(KeyValue(fieldName, value.toString()))
             }
@@ -362,7 +390,7 @@ public class MetricsLayer(
         instrumentLayer.instruments.updateMetric(instrument, name)
     }
 
-    public fun getRecordedMetrics(name: String): List<InstrumentType> = recordedMetrics[name] ?: emptyList()
+    public fun getRecordedMetrics(name: String): List<InstrumentType> = recordedMetrics[name].orEmpty()
 
     public fun onEvent(event: Any? = null, ctx: Any? = null) {
         instrumentLayer.onEvent(event, ctx)

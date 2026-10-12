@@ -138,7 +138,7 @@ public data class SpanBuilderUpdates(
     }
 
     public fun addAttribute(attribute: KeyValue) {
-        attributes = (attributes ?: emptyList()) + attribute
+        attributes = attributes.orEmpty() + attribute
     }
 
     public fun update(
@@ -152,7 +152,7 @@ public data class SpanBuilderUpdates(
             this.spanKind = spanUpdates.spanKind
         }
         if (spanUpdates.attributes != null) {
-            this.attributes = (this.attributes ?: emptyList()) + (spanUpdates.attributes ?: emptyList())
+            this.attributes = this.attributes.orEmpty() + spanUpdates.attributes.orEmpty()
         }
         val nextStatus = spanUpdates.status ?: currentStatus
         this.status = nextStatus
@@ -210,7 +210,10 @@ public class SpanEventVisitor(
         value: String,
     ) {
         when (name) {
-            "message" -> eventName = value
+            "message" -> {
+                eventName = value
+            }
+
             "error" -> {
                 if (eventName.isEmpty()) {
                     if (semConvConfig.errorEventsToStatus) {
@@ -229,7 +232,10 @@ public class SpanEventVisitor(
                     _attributes.add(KeyValue(name, value))
                 }
             }
-            else -> _attributes.add(KeyValue(name, value))
+
+            else -> {
+                _attributes.add(KeyValue(name, value))
+            }
         }
     }
 

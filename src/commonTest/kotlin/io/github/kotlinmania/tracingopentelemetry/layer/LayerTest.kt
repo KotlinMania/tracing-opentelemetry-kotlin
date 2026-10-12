@@ -530,8 +530,8 @@ class LayerTest {
     fun parentContext() {
         val tracer = TestTracer.default()
         val root = tracer.buildWithContext(SpanBuilder(name = "root"), OtelContext.ROOT)
-        val child1 = tracer.buildWithContext(SpanBuilder(name = "child-1"), root.spanContext())
-        val child2 = tracer.buildWithContext(SpanBuilder(name = "child-2"), root.spanContext())
+        tracer.buildWithContext(SpanBuilder(name = "child-1"), root.spanContext())
+        tracer.buildWithContext(SpanBuilder(name = "child-2"), root.spanContext())
 
         val spans = tracer.spans()
         val parent = spans.first { it.name == "root" }
@@ -544,7 +544,6 @@ class LayerTest {
 
     @Test
     fun parentContext2() {
-        val parent = OtelContext.of("trace-2", "span-2")
         val l = layer()
         assertEquals(OtelContext.ROOT.traceId(), l.parentContext().traceId())
     }
