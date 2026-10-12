@@ -4,8 +4,6 @@ package io.github.kotlinmania.tracingopentelemetry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-private typealias IdStringStack = IdValueStack<String>
-
 class StackTest {
     @Test
     fun popLastValue() {
