@@ -15,14 +15,50 @@ import kotlin.test.assertTrue
 
 public class TestTracer(
     public val spans: MutableList<TestSpan> = mutableListOf(),
+) {
+    public fun spans(): List<TestSpan> = spans
+
+    public fun <T> withData(block: (TestSpan) -> T): T {
+        val span = spans.firstOrNull() ?: error("no spans recorded")
+        return block(span)
+    }
+
+    public fun attributes(): Map<String, String> =
+        withData { span -> span.attributes.associate { it.key to it.value } }
+
+    public fun buildWithContext(
+        builder: SpanBuilder,
+        parentCx: OtelContext = OtelContext.ROOT,
+    ): TestSpan {
+        val span =
+            TestSpan(
+                name = builder.name,
+                spanContext = parentCx,
+                spanKind = builder.spanKind,
+            )
+        spans.add(span)
+        return span
+    }
+
+    public companion object {
+        public fun default(): TestTracer = TestTracer()
+    }
+}
+
+public data class SpanBuilder(
+    val name: String = "",
+    val spanKind: SpanKind = SpanKind.Internal,
 )
 
 public class TestSpan(
-    public val name: String,
+    public var name: String,
     public val spanContext: OtelContext = OtelContext.ROOT,
     public val attributes: MutableList<KeyValue> = mutableListOf(),
     private var spanStatus: SpanStatus = SpanStatus.Unset,
+    public var spanKind: SpanKind = SpanKind.Internal,
 ) {
+    public fun spanContext(): OtelContext = spanContext
+
     public fun isRecording(): Boolean = true
 
     public fun status(): SpanStatus = spanStatus
@@ -35,16 +71,29 @@ public class TestSpan(
         spanStatus = newStatus
     }
 
-    public fun updateName(newName: String) {}
+    public fun updateName(newName: String) {
+        name = newName
+    }
 
-    public fun addLink(cx: OtelContext) {}
+    public fun addLink(cx: OtelContext, attributes: List<KeyValue> = emptyList()) {}
 
-    public fun endWithTimestamp(timestamp: Any?) {}
+    public fun endWithTimestamp(timestamp: Any? = null) {}
 }
 
 public class TestDynError(
-    override val message: String = "dynamic error",
-) : Exception(message)
+    public val msg: String = "dynamic error",
+    public val source: TestDynError? = null,
+) : Exception(msg, source) {
+    public fun fmt(): String = msg
+
+    public fun source(): Throwable? = source
+
+    public fun withParent(parentMsg: String): TestDynError = TestDynError(parentMsg, this)
+
+    public companion object {
+        public fun new(msg: String): TestDynError = TestDynError(msg)
+    }
+}
 
 public data class ValueA(
     val a: String,
@@ -184,6 +233,42 @@ class LayerTest {
         assertEquals(SpanStatus.Ok, visitor.status)
         assertEquals(1, visitor.attributes.size)
         assertEquals("custom_attr", visitor.attributes[0].key)
+    }
+
+    @Test
+    fun dynamicSpanNames() {
+        val dynamicName = "GET http://example.com"
+        val tracer = TestTracer.default()
+        val span = tracer.buildWithContext(SpanBuilder(name = "static_name"), OtelContext.ROOT)
+        span.updateName(dynamicName)
+        assertEquals(dynamicName, span.name)
+    }
+
+    @Test
+    fun spanKind() {
+        val tracer = TestTracer.default()
+        tracer.buildWithContext(SpanBuilder(name = "request", spanKind = SpanKind.Server), OtelContext.ROOT)
+        val recordedKind = tracer.withData { it.spanKind }
+        assertEquals(SpanKind.Server, recordedKind)
+    }
+
+    @Test
+    fun spanStatusCode() {
+        val tracer = TestTracer.default()
+        val span = tracer.buildWithContext(SpanBuilder(name = "request"), OtelContext.ROOT)
+        span.setStatus(SpanStatus.Ok)
+        val recordedStatus = tracer.withData { it.status() }
+        assertEquals(SpanStatus.Ok, recordedStatus)
+    }
+
+    @Test
+    fun spanStatusDescription() {
+        val tracer = TestTracer.default()
+        val message = "message"
+        val span = tracer.buildWithContext(SpanBuilder(name = "request"), OtelContext.ROOT)
+        span.setStatus(SpanStatus.Error(message))
+        val recordedStatus = tracer.withData { it.status() }
+        assertEquals(SpanStatus.Error(message), recordedStatus)
     }
 
     // Parity tests matching layer.rs upstream test suite
@@ -439,6 +524,22 @@ class LayerTest {
     @Test
     fun recordAfterNoContextActivation() {
         recordAfterImpl(false)
+    }
+
+    @Test
+    fun parentContext() {
+        val tracer = TestTracer.default()
+        val root = tracer.buildWithContext(SpanBuilder(name = "root"), OtelContext.ROOT)
+        val child1 = tracer.buildWithContext(SpanBuilder(name = "child-1"), root.spanContext())
+        val child2 = tracer.buildWithContext(SpanBuilder(name = "child-2"), root.spanContext())
+
+        val spans = tracer.spans()
+        val parent = spans.first { it.name == "root" }
+        val c1 = spans.first { it.name == "child-1" }
+        val c2 = spans.first { it.name == "child-2" }
+        assertEquals("root", parent.name)
+        assertEquals(parent.spanContext().spanId(), c1.spanContext().spanId())
+        assertEquals(parent.spanContext().spanId(), c2.spanContext().spanId())
     }
 
     @Test

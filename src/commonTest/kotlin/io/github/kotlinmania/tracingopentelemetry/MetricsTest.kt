@@ -4,7 +4,14 @@ package io.github.kotlinmania.tracingopentelemetry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+
+public class PanicLayer {
+    public fun onEvent(event: Any? = null, ctx: Any? = null) {
+        error("panic")
+    }
+}
 
 class MetricsTest {
     @Test
@@ -62,5 +69,7 @@ class MetricsTest {
         assertFalse(MetricsFilter.isMetricsEvent("key"))
         assertFalse(MetricsFilter.isMetricsEvent("foo"))
         assertTrue(MetricsFilter.isMetricsEvent("monotonic_counter.requests"))
+        val panicLayer = PanicLayer()
+        assertNotNull(panicLayer)
     }
 }

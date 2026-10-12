@@ -6,6 +6,9 @@ private data class IdValue<T>(
     val value: T,
 )
 
+public typealias IdStringStack = IdValueStack<String>
+public typealias IdContextGuardStack = IdValueStack<Any>
+
 public class IdValueStack<T> {
     private val stack: MutableList<IdValue<T>> = mutableListOf()
 

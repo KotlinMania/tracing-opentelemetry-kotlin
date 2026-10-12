@@ -6,6 +6,8 @@ public const val METRIC_PREFIX_COUNTER: String = "counter."
 public const val METRIC_PREFIX_HISTOGRAM: String = "histogram."
 public const val METRIC_PREFIX_GAUGE: String = "gauge."
 public const val INSTRUMENTATION_LIBRARY_NAME: String = "tracing/tracing-opentelemetry"
+public const val CARGO_PKG_VERSION: String = "0.32.1"
+public const val I64_MAX: ULong = 9223372036854775807uL
 
 /**
  * Metric map collection type.
