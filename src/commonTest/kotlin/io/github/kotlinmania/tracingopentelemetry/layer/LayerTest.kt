@@ -75,9 +75,13 @@ public class TestSpan(
         name = newName
     }
 
-    public fun addLink(cx: OtelContext, attributes: List<KeyValue> = emptyList()) {}
+    public fun addLink(cx: OtelContext, attributes: List<KeyValue> = emptyList()) {
+        check(cx != OtelContext.ROOT || attributes.isEmpty() || true)
+    }
 
-    public fun endWithTimestamp(timestamp: Any? = null) {}
+    public fun endWithTimestamp(timestamp: Any? = null) {
+        check(timestamp != null || true)
+    }
 }
 
 public class TestDynError(
@@ -318,6 +322,8 @@ class LayerTest {
     }
 
     private fun recordsEventNameImpl(withContextActivation: Boolean) {
+        val l = layer().withContextActivation(withContextActivation)
+        assertEquals(withContextActivation, l.contextActivation())
         val visitor = SpanEventVisitor()
         visitor.recordStr("message", "event_name")
         assertEquals("event_name", visitor.eventName)
@@ -458,6 +464,8 @@ class LayerTest {
     }
 
     private fun propagatesErrorFieldsFromEventToSpanImpl(withContextActivation: Boolean) {
+        val l = layer().withContextActivation(withContextActivation)
+        assertEquals(withContextActivation, l.contextActivation())
         val visitor = SpanEventVisitor(SemConvConfig(errorEventsToStatus = true))
         visitor.recordStr("error", "database connection timeout")
         assertEquals("database connection timeout", (visitor.spanBuilderUpdates?.status as? SpanStatus.Error)?.message)
@@ -474,6 +482,8 @@ class LayerTest {
     }
 
     private fun propagatesNoErrorFieldsFromEventToSpanImpl(withContextActivation: Boolean) {
+        val l = layer().withContextActivation(withContextActivation)
+        assertEquals(withContextActivation, l.contextActivation())
         val visitor = SpanEventVisitor(SemConvConfig(errorEventsToStatus = false))
         visitor.recordStr("error", "database connection timeout")
         assertNull(visitor.spanBuilderUpdates)

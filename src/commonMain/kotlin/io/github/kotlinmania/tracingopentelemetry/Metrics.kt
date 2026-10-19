@@ -1,6 +1,8 @@
 // port-lint: source metrics.rs
 package io.github.kotlinmania.tracingopentelemetry
 
+import io.github.kotlinmania.tracing.Id
+
 public const val METRIC_PREFIX_MONOTONIC_COUNTER: String = "monotonic_counter."
 public const val METRIC_PREFIX_COUNTER: String = "counter."
 public const val METRIC_PREFIX_HISTOGRAM: String = "histogram."

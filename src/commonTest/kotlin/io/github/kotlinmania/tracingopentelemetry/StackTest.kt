@@ -1,6 +1,7 @@
 // port-lint: tests stack.rs
 package io.github.kotlinmania.tracingopentelemetry
 
+import io.github.kotlinmania.tracing.Id
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

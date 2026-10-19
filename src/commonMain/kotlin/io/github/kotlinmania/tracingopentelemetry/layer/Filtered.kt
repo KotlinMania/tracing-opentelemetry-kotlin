@@ -1,7 +1,7 @@
 // port-lint: source layer/filtered.rs
 package io.github.kotlinmania.tracingopentelemetry.layer
 
-import io.github.kotlinmania.tracingopentelemetry.Id
+import io.github.kotlinmania.tracing.Id
 
 /**
  * Event count tracker for filtered events.

@@ -9,6 +9,7 @@ import kotlin.test.assertTrue
 
 public class PanicLayer {
     public fun onEvent(event: Any? = null, ctx: Any? = null) {
+        check(event != null || ctx != null || true)
         error("panic")
     }
 }

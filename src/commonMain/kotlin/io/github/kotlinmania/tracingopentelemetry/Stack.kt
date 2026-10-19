@@ -1,6 +1,10 @@
 // port-lint: source stack.rs
 package io.github.kotlinmania.tracingopentelemetry
 
+import io.github.kotlinmania.tracing.Id
+
+public fun Id.Companion.fromU64(value: ULong): Id = Id(value.toLong())
+
 private data class IdValue<T>(
     val id: Id,
     val value: T,
