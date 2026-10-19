@@ -1,7 +1,7 @@
 // port-lint: source layer.rs
 package io.github.kotlinmania.tracingopentelemetry.layer
 
-import io.github.kotlinmania.tracingopentelemetry.Id
+import io.github.kotlinmania.tracing.Id
 import io.github.kotlinmania.tracingopentelemetry.IdValueStack
 import io.github.kotlinmania.tracingopentelemetry.KeyValue
 import io.github.kotlinmania.tracingopentelemetry.OtelContext

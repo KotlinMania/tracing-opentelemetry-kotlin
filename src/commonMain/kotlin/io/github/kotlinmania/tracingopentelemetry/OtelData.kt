@@ -1,48 +1,6 @@
-// port-lint: source lib.rs
 package io.github.kotlinmania.tracingopentelemetry
 
-import kotlin.time.Clock
 import kotlin.time.Instant
-
-/**
- * Tracing OpenTelemetry connects spans from multiple systems into a trace and emits
- * them to OpenTelemetry-compatible distributed tracing systems for processing and visualization.
- *
- * ### Special Fields
- *
- * Fields with an `otel.` prefix are reserved for this library and have specific meaning:
- * - `otel.name`: Override the span name sent to OpenTelemetry exporters.
- * - `otel.kind`: Set the span kind to one of the supported OpenTelemetry span kinds ("client", "server", etc.).
- * - `otel.status`: Set the span status code.
- * - `otel.message`: Set the span description of the status.
- *
- * ### Semantic Conventions
- *
- * OpenTelemetry defines conventional names for attributes of common operations.
- *
- * ### Feature Flags
- *
- * - `metrics`: Enables the MetricsLayer type, exporting OpenTelemetry metrics from specifically-named events.
- */
-public object TracingOpentelemetryLib {
-    public const val MODULE_NAME: String = "tracing-opentelemetry"
-    public const val CRATE_NAME: String = "tracing_opentelemetry"
-}
-
-/**
- * Time utility module for timestamp generation.
- */
-public object TracingOpentelemetryTime {
-    /**
-     * Gets current instant timestamp.
-     */
-    public fun now(): Instant = Clock.System.now()
-}
-
-/**
- * Returns current timestamp.
- */
-public fun now(): Instant = TracingOpentelemetryTime.now()
 
 /**
  * Per-span OpenTelemetry data tracked by this crate.
